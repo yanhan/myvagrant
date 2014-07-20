@@ -6,3 +6,9 @@
 
 - name: install screen
   apt: name=screen state=present
+
+- name: install python-virtualenv
+  apt: name=python-virtualenv state=present
+
+- name: install python-dev
+  apt: name=python-dev state=present
