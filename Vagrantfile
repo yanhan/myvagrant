@@ -10,10 +10,21 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # please see the online documentation at vagrantup.com.
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "hashicorp/precise64"
+  # config.vm.box = "hashicorp/precise64"
 
   # define name of Vagrant
-  config.vm.define :myvagrant do |v|
+  config.vm.define :myvagrant do |my_config|
+    my_config.vm.box = "hashicorp/precise64"
+    my_config.vm.host_name = "myvagrant"
+    my_config.vm.network "private_network", ip: "192.168.124.231"
+    my_config.vm.synced_folder "vagrant-share", "/vagrant-share"
+
+    my_config.vm.provision "ansible" do |ansible|
+      ansible.inventory_path = "ansible/inventory"
+      ansible.playbook = "ansible/site.yml"
+      ansible.verbose = "vvvv"
+      ansible.limit = "all"
+    end
   end
 
   # Disable automatic box update checking. If you disable this, then
@@ -28,7 +39,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  # config.vm.network "private_network", ip: "192.168.33.10"
+  # config.vm.network "private_network", ip: "192.168.124.231"
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -43,7 +54,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
-  config.vm.synced_folder "vagrant-share", "/vagrant-share"
+  # config.vm.synced_folder "vagrant-share", "/vagrant-share"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
