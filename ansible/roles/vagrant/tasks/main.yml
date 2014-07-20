@@ -1,6 +1,9 @@
 - name: apt-get update if last update was > 1h ago
   apt: update_cache=yes cache_valid_time=3600
 
+- name: install make
+  apt: name=make state=present
+
 - name: install curl
   apt: name=curl state=present
 
