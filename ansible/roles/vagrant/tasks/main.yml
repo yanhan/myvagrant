@@ -13,6 +13,9 @@
 - name: install sqlite3
   apt: name=sqlite3 state=present
 
+- name: install socat
+  apt: name=socat state=present
+
 - name: install g++
   apt: name=g++ state=present
 
