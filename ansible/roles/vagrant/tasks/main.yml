@@ -7,6 +7,9 @@
 - name: install curl
   apt: name=curl state=present
 
+- name: install g++
+  apt: name=g++ state=present
+
 - name: install vim
   apt: name=vim state=present
 
