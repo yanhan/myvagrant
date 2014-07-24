@@ -47,3 +47,5 @@
   when: docker_exists.rc != 0
 
 - include: install_git.yml
+
+- include: install_git_crypt.yml

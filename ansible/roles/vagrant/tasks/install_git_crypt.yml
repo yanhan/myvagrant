@@ -1,0 +1,31 @@
+- name: check if git-crypt is installed
+  shell: command -v git-crypt >/dev/null 2>&1
+  register: git_crypt_installed
+  ignore_errors: true
+
+- name: check if git-crypt repository exists
+  shell: git rev-parse >/dev/null 2>&1
+  args:
+    chdir: "{{ git_crypt_repo_path }}"
+  ignore_errors: true
+  register: git_crypt_repo_exists
+  when: git_crypt_installed.rc != 0
+
+- name: git clone git-crypt repository
+  git: repo=https://github.com/AGWA/git-crypt.git
+       dest="{{ git_crypt_repo_path }}"
+  sudo_user: vagrant
+  when: git_crypt_installed.rc != 0 and git_crypt_repo_exists.rc != 0
+
+- name: build git-crypt
+  shell: make
+  args:
+    chdir: "{{ git_crypt_repo_path }}"
+  sudo_user: vagrant
+  when: git_crypt_installed.rc != 0
+
+- name: install git-crypt
+  shell: cp git-crypt /usr/local/bin/
+  args:
+    chdir: "{{ git_crypt_repo_path }}"
+  when: git_crypt_installed.rc != 0
