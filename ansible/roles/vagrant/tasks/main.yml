@@ -45,3 +45,5 @@
 - name: install Docker if it does not exist
   shell: (wget -qO- https://get.docker.io/ | bash) && usermod -aG docker vagrant
   when: docker_exists.rc != 0
+
+- include: install_git.yml
