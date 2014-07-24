@@ -1,0 +1,62 @@
+- name: check if node.js is installed
+  shell: command -v node >/dev/null 2>&1
+  ignore_errors: true
+  register: node_js_installed
+
+- name: check if node.js git repository directory exists
+  shell: test -d {{ node_js_repo_path }}
+  register: node_js_git_repo_dir_exists
+  ignore_errors: true
+  when: node_js_installed.rc != 0
+
+- name: check if node.js git repository directory is a git repo
+  shell: git rev-parse >/dev/null 2>&1
+  args:
+    chdir: "{{node_js_repo_path}}"
+  register: node_js_git_repo_dir_is_git_repo
+  ignore_errors: true
+  when: node_js_installed.rc != 0 and node_js_git_repo_dir_exists.rc == 0
+
+- name: remove node.js git repository directory if it's not a git repo
+  shell: rm -rf {{ node_js_repo_path }}
+  when: node_js_installed.rc != 0 and
+        node_js_git_repo_dir_is_git_repo is defined and
+        node_js_git_repo_dir_is_git_repo.rc != 0
+
+- name: clone node.js git repository
+  git: repo=https://github.com/joyent/node.git
+       dest="{{node_js_repo_path}}"
+  sudo_user: vagrant
+  when: node_js_installed.rc != 0 and
+        (node_js_git_repo_dir_exists.rc != 0 or
+          (node_js_git_repo_dir_is_git_repo is defined and
+            node_js_git_repo_dir_is_git_repo.rc != 0))
+
+- name: check if node.js git repository is checked out at v0.10.29
+  shell: git status -uno
+  args:
+    chdir: "{{node_js_repo_path}}"
+  sudo_user: vagrant
+  register: node_js_repo_git_status
+  when: node_js_installed.rc != 0
+
+- name: node.js git repo - checkout v0.10.29
+  shell: git checkout v0.10.29
+  args:
+    chdir: "{{node_js_repo_path}}"
+  sudo_user: vagrant
+  when: node_js_installed.rc != 0 and
+        "HEAD detached at v0.10.29" not in node_js_repo_git_status.stdout
+
+- name: build node.js
+  shell: ./configure && make
+  args:
+    chdir: "{{node_js_repo_path}}"
+  sudo_user: vagrant
+  when: node_js_installed.rc != 0
+
+- name: install node.js
+  shell: make install
+  args:
+    chdir: "{{node_js_repo_path}}"
+  when: node_js_installed.rc != 0

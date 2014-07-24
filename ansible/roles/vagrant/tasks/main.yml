@@ -49,3 +49,5 @@
 - include: install_git.yml
 
 - include: install_git_crypt.yml
+
+- include: install_node_js.yml
