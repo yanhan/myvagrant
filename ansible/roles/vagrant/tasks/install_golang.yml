@@ -1,0 +1,69 @@
+# Here, we add an `update-etc-environment-path` script that will help us
+# add the golang bin folder to the PATH environment variable.
+
+- name: check if update-etc-environment-path script exists
+  shell: command -v update-etc-environment-path >/dev/null 2>&1
+  register: update_etc_environment_path_script_exists
+  ignore_errors: true
+
+- name: compute SHA256 sum of local update-etc-environment-path script
+  shell: sha256sum update-etc-environment-path.py
+  args:
+    chdir: ~/myvagrant/ansible/roles/vagrant/files
+  register: update_etc_environment_path_script_local_sha256_sum
+  connection: local
+  sudo_user: yh
+  delegate_to: 127.0.0.1
+
+- name: get SHA256sum of update-etc-environment-path script on server
+  shell: sha256sum {{update_etc_environment_path_script_path}}
+  register: update_etc_environment_path_script_server_sha256_sum
+  when: update_etc_environment_path_script_exists.rc == 0
+
+- name: copy update-etc-environment-path script to the server
+  copy: src=update-etc-environment-path.py
+        dest="{{update_etc_environment_path_script_path}}"
+        owner=root
+        group=root
+        mode=755
+  when: update_etc_environment_path_script_exists.rc != 0 or
+        (update_etc_environment_path_server_sha256_sum is defined and
+         update_etc_environment_path_server_sha256_sum.split()[0] !=
+         update_etc_environment_path_script_local_sha256_sum.split()[0])
+
+- name: ensure that {{golang_bin_folder_path}} is in PATH
+  shell: update-etc-environment-path --folder {{golang_bin_folder_path}}
+
+- name: check if golang is installed
+  shell: command -v go >/dev/null 2>&1
+  register: golang_installed
+  environment:
+    PATH: "{{ansible_env.PATH}}:{{golang_bin_folder_path}}"
+  ignore_errors: true
+
+- name: check if golang 1.3 tarball is downloaded
+  shell: test -f {{golang_tarball_path}}
+  register: golang_tarball_downloaded
+  ignore_errors: true
+  when: golang_installed.rc != 0
+
+- name: download golang 1.3 tarball
+  shell: wget http://golang.org/dl/go1.3.linux-amd64.tar.gz -O {{golang_tarball_path}}
+  args:
+    chdir: /home/vagrant
+  sudo_user: vagrant
+  when: golang_installed.rc != 0 and golang_tarball_downloaded.rc != 0
+
+- name: compute SHA1sum of golang 1.3 tarball
+  shell: sha1sum {{golang_tarball_path}}
+  register: golang_tarball_sha1sum
+  when: golang_installed.rc != 0
+
+- name: ensure golang 1.3 tarball has correct SHA1sum
+  assert:
+    that: "'b6b154933039987056ac307e20c25fa508a06ba6' == golang_tarball_sha1sum.stdout.split()[0]"
+  when: golang_installed.rc != 0
+
+- name: install golang 1.3
+  shell: tar -C /usr/local -xzf {{golang_tarball_path}}
+  when: golang_installed.rc != 0

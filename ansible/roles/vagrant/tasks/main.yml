@@ -51,3 +51,5 @@
 - include: install_git_crypt.yml
 
 - include: install_node_js.yml
+
+- include: install_golang.yml
