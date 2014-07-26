@@ -22,6 +22,9 @@
 - name: install gdb
   apt: name=gdb state=present
 
+- name: install valgrind
+  apt: name=valgrind state=present
+
 - name: install vim
   apt: name=vim state=present
 
