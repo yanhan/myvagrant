@@ -30,6 +30,7 @@
   sudo_user: vagrant
   register: git_tarball_extracted
   when: git_installed.rc != 0
+  ignore_errors: true
 
 - name: extract git tarball
   shell: tar xzf $HOME/git-2.0.4.tar.gz
