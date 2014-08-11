@@ -25,6 +25,7 @@
   sudo_user: yh
   delegate_to: 127.0.0.1
   when: update_etc_environment_path_script_local_sha256_sum.rc != 0
+  ignore_errors: true
 
 - name: get SHA256sum of update-etc-environment-path script on server
   shell: sha256sum {{update_etc_environment_path_script_path}}
@@ -38,12 +39,14 @@
         group=root
         mode=755
   when: update_etc_environment_path_script_exists.rc != 0 or
-        (update_etc_environment_path_script_server_sha256_sum is defined and
-         ((update_etc_environment_path_script_server_sha256_sum.split()[0] !=
-           update_etc_environment_path_script_local_sha256_sum.split()[0]) or
-          (update_etc_environment_path_script_server_sha256_sum.split()[0] !=
-           osx_update_etc_environment_path_script_local_sha256_sum.split()[0])
-         )
+        (update_etc_environment_path_script_local_sha256_sum.rc == 0 and
+         update_etc_environment_path_script_local_sha256_sum.stdout.split()[0] !=
+         update_etc_environment_path_script_server_sha256_sum.stdout.split()[0]
+        ) or
+        (osx_update_etc_environment_path_script_local_sha256_sum is defined and
+         osx_update_etc_environment_path_script_local_sha256_sum.rc == 0 and
+         osx_update_etc_environment_path_script_local_sha256_sum.stdout.split()[0] !=
+         update_etc_environment_path_script_server_sha256_sum.stdout.split()[0]
         )
 
 - name: ensure that {{golang_bin_folder_path}} is in PATH
