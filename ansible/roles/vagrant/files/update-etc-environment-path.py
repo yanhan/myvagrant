@@ -119,9 +119,8 @@ def main():
       PATH_STRING_TEMPLATE.format(folders=":".join(folders_to_add_list))
     )
   else:
-    etc_env_lines_list[path_line_idx] = _add_folders_to_path(path_line,
-      folders_to_add_list
-    )
+    (_, new_path_line) = _add_folders_to_path(path_line, folders_to_add_list)
+    etc_env_lines_list[path_line_idx] = new_path_line
 
   with open(ETC_ENVIRONMENT, "w") as f:
     for line in etc_env_lines_list:
