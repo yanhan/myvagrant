@@ -27,6 +27,12 @@
   when: update_etc_environment_path_script_local_sha256_sum.rc != 0
   ignore_errors: true
 
+- name: ensure checksum of local update-etc-environment-path script is taken
+  assert:
+    that: >
+      update_etc_environment_path_script_local_sha256_sum.rc == 0 or
+      osx_update_etc_environment_path_script_local_sha256_sum.rc == 0
+
 - name: get SHA256sum of update-etc-environment-path script on server
   shell: sha256sum {{update_etc_environment_path_script_path}}
   register: update_etc_environment_path_script_server_sha256_sum
