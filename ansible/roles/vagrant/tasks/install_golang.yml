@@ -27,8 +27,8 @@
         group=root
         mode=755
   when: update_etc_environment_path_script_exists.rc != 0 or
-        (update_etc_environment_path_server_sha256_sum is defined and
-         update_etc_environment_path_server_sha256_sum.split()[0] !=
+        (update_etc_environment_path_script_server_sha256_sum is defined and
+         update_etc_environment_path_script_server_sha256_sum.split()[0] !=
          update_etc_environment_path_script_local_sha256_sum.split()[0])
 
 - name: ensure that {{golang_bin_folder_path}} is in PATH
