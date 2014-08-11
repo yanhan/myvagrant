@@ -4,35 +4,35 @@
   ignore_errors: true
 
 - name: check if git tarball exists
-  shell: test -f $HOME/git-2.0.2.tar.gz
+  shell: test -f $HOME/git-2.0.4.tar.gz
   sudo_user: vagrant
   register: git_tarball_exists
   ignore_errors: true
 
-- name: download git 2.0.2 tarball
-  shell: wget https://github.com/git/git/archive/v2.0.2.tar.gz -O $HOME/git-2.0.2.tar.gz
+- name: download git 2.0.4 tarball
+  shell: wget https://github.com/git/git/archive/v2.0.4.tar.gz -O $HOME/git-2.0.4.tar.gz
   sudo_user: vagrant
   when: git_installed.rc != 0 and git_tarball_exists.rc != 0
 
-- name: compute sha256sum git 2.0.2 tarball
-  shell: sha256sum $HOME/git-2.0.2.tar.gz
+- name: compute sha256sum git 2.0.4 tarball
+  shell: sha256sum $HOME/git-2.0.4.tar.gz
   sudo_user: vagrant
   register: git_tarball_sha256sum
   when: git_installed.rc != 0
 
-- name: check sha256sum of git 2.0.2 tarball
+- name: check sha256sum of git 2.0.4 tarball
   assert:
-    that: "git_tarball_sha256sum.stdout.split()[0] == '790b6edd60fdde4644de85f7ed075f99f1d57539a19f157b7220cefab7eda914'"
+    that: "git_tarball_sha256sum.stdout.split()[0] == '68f235fc1ddd5dc1fcb9eda520fd4a17024df785d0433aab3bc1ea939665f58f'"
   when: git_installed.rc != 0
 
 - name: check if git tarball has been extracted
-  shell: test -d $HOME/git-2.0.2
+  shell: test -d $HOME/git-2.0.4
   sudo_user: vagrant
   register: git_tarball_extracted
   when: git_installed.rc != 0
 
 - name: extract git tarball
-  shell: tar xzf $HOME/git-2.0.2.tar.gz
+  shell: tar xzf $HOME/git-2.0.4.tar.gz
   sudo_user: vagrant
   when: git_installed.rc != 0 and git_tarball_extracted.rc != 0
 
@@ -57,7 +57,7 @@
 - name: build git
   shell: make prefix=/usr/local all doc info
   args:
-    chdir: /home/vagrant/git-2.0.2
+    chdir: /home/vagrant/git-2.0.4
   sudo_user: vagrant
   register: git_built
   when: git_installed.rc != 0 and git_tarball_extracted.rc == 0
@@ -65,5 +65,5 @@
 - name: install git
   shell: make prefix=/usr/local install install-doc install-html install-info
   args:
-    chdir: /home/vagrant/git-2.0.2
+    chdir: /home/vagrant/git-2.0.4
   when: git_installed.rc != 0 and git_built.rc == 0
