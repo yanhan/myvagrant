@@ -55,6 +55,9 @@
   shell: (wget -qO- https://get.docker.io/ | bash) && usermod -aG docker vagrant
   when: docker_exists.rc != 0
 
+- name: ensure git is not installed by package manager
+  apt: name=git state=absent
+
 - include: install_git.yml
 
 - include: install_git_crypt.yml
