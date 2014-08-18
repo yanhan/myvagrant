@@ -8,3 +8,14 @@
   shell: \curl -sSL https://get.rvm.io | bash -s stable
   sudo_user: vagrant
   when: rvm_installed.rc != 0
+
+- name: see if ruby-2.1.2 is installed using rvm
+  shell: rvm list | grep --quiet 'ruby-2\.1\.2'
+  register: ruby_2_1_2_installed
+  sudo_user: vagrant
+  ignore_errors: true
+
+- name: install ruby-2.1.2
+  shell: /home/vagrant/.rvm/bin/rvm install ruby-2.1.2
+  sudo_user: vagrant
+  when: ruby_2_1_2_installed.rc != 0
