@@ -65,3 +65,5 @@
 - include: install_node_js.yml
 
 - include: install_golang.yml
+
+- include: install_rvm.yml

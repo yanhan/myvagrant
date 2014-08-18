@@ -1,0 +1,10 @@
+- name: check if rvm is installed
+  shell: test -s $HOME/.rvm/bin/rvm && test -x $HOME/.rvm/bin/rvm
+  register: rvm_installed
+  sudo_user: vagrant
+  ignore_errors: true
+
+- name: install rvm
+  shell: \curl -sSL https://get.rvm.io | bash -s stable
+  sudo_user: vagrant
+  when: rvm_installed.rc != 0
