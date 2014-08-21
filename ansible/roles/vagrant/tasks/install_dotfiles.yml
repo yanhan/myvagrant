@@ -1,0 +1,28 @@
+- name: check if oh my zsh is installed
+  shell: test -d .oh-my-zsh
+  sudo_user: vagrant
+  register: oh_my_zsh_installed
+  ignore_errors: true
+
+- name: clone oh my zsh repository
+  shell: >
+    git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh &&
+      cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
+  sudo_user: vagrant
+  when: oh_my_zsh_installed.rc != 0
+
+- name: change vagrant user to use zsh shell
+  shell: cat "{{vagrant_password_file_dest_path}}" | chsh -s /bin/zsh
+  sudo_user: vagrant
+  when: oh_my_zsh_installed.rc != 0
+
+- name: ensure my dotfiles git repository exists
+  git: repo=https://github.com/yanhan/dotfiles.git
+       dest="{{dotfiles_repo_path}}"
+  sudo_user: vagrant
+
+- name: setup dotfiles repository
+  shell: python setup_home_folder_dotfiles.py
+  args:
+    chdir: "{{dotfiles_repo_path}}"
+  sudo_user: vagrant
