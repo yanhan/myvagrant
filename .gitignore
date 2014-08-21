@@ -1,1 +1,2 @@
 /vagrant-share
+/ansible/roles/vagrant/files/vagrant_password.txt

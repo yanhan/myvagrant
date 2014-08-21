@@ -1,3 +1,11 @@
+# This is to allow for commands that require a password
+- name: copy password file to Vagrant
+  copy: src=vagrant_password.txt
+        dest="{{vagrant_password_file_dest_path}}"
+        owner=vagrant
+        group=vagrant
+        mode=0600
+
 - name: apt-get update if last update was > 1h ago
   apt: update_cache=yes cache_valid_time=3600
 
@@ -60,6 +68,8 @@
 
 - include: install_git.yml
 
+- include: install_dotfiles.yml
+
 - include: install_git_crypt.yml
 
 - include: install_node_js.yml
@@ -67,3 +77,6 @@
 - include: install_golang.yml
 
 - include: install_rvm.yml
+
+- name: remove password file
+  shell: rm -f "{{vagrant_password_file_dest_path}}"

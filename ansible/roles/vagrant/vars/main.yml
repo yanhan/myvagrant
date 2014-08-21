@@ -3,3 +3,6 @@ node_js_repo_path: /home/vagrant/node
 update_etc_environment_path_script_path: /usr/local/bin/update-etc-environment-path
 golang_bin_folder_path: /usr/local/go/bin
 golang_tarball_path: /home/vagrant/go1.3.linux-amd64.tar.gz
+vagrant_password_file_dest_path: /home/vagrant/vagrant_password.txt
+dotfiles_repo_path: /home/vagrant/dotfiles
+vundle_repo_path: /home/vagrant/.vim/bundle/Vundle.vim
