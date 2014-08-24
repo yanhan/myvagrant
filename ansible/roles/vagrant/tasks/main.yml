@@ -6,8 +6,8 @@
         group=vagrant
         mode=0600
 
-- name: apt-get update if last update was > 1h ago
-  apt: update_cache=yes cache_valid_time=3600
+- name: apt-get update if last update was > 1 day ago
+  apt: update_cache=yes cache_valid_time=86400
 
 - name: install zsh
   apt: name=zsh state=present
