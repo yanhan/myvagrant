@@ -6,3 +6,6 @@ golang_tarball_path: /home/vagrant/go1.3.linux-amd64.tar.gz
 vagrant_password_file_dest_path: /home/vagrant/vagrant_password.txt
 dotfiles_repo_path: /home/vagrant/dotfiles
 vundle_repo_path: /home/vagrant/.vim/bundle/Vundle.vim
+my_id_rsa_pub_path: /tmp/my_id_rsa.pub
+vagrant__append_id_rsa_pub_script_path: /usr/local/bin/append-id-rsa-pub-to-authorized-keys
+local__append_id_rsa_pub_script_path: append-id-rsa-pub-to-authorized-keys.py

@@ -46,6 +46,20 @@ The following entry should be in your SSH config (most likely at
 There should be a `ansible/roles/vagrant/files/vagrant_password.txt` file
 containing a single line which is the password of the `vagrant` user.
 
+## SSH Public Key Pair
+
+This Vagrant setup requires the use of a custom SSH keypair. Copy your
+SSH public key to `ansible/roles/vagrant/files/id_rsa.pub`:
+
+    cp ~/.ssh/id_rsa.pub ansible/roles/vagrant/files/id_rsa.pub
+
+and comment out this line in the Vagrantfile before your first provision:
+
+    my_config.ssh.private_key_path = "~/.ssh/id_rsa"
+
+You will need to uncomment that line after the first provision is done.
+A little troublesome I know.
+
 ## Vagrant Up
 
 Now we are ready to initialize and provision the Vagrant.

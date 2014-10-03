@@ -1,2 +1,3 @@
 /vagrant-share
 /ansible/roles/vagrant/files/vagrant_password.txt
+/ansible/roles/vagrant/files/id_rsa.pub

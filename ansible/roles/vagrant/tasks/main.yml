@@ -1,3 +1,87 @@
+##############################
+# Use custom keypair for SSH
+# You will need to comment out the following line in the `Vagrantfile`:
+#
+#     my_config.ssh.private_key = "~/.ssh/id_rsa"
+#
+# for the provisioning to work.
+# After the provisioning, you can then uncomment that line
+##############################
+- name: check if append-id-rsa-pub-to-authorized-keys script exists in Vagrant
+  shell: command -v {{vagrant__append_id_rsa_pub_script_path}} >/dev/null 2>&1
+  register: vagrant__append_id_rsa_pub_exists
+  ignore_errors: True
+
+- name: >
+    compute SHA256sum of append-id-rsa-pub-to-authorized-keys script
+    (in Vagrant)
+  shell: sha256sum {{vagrant__append_id_rsa_pub_script_path}}
+  register: vagrant__append_id_rsa_pub_sha256sum
+  when: vagrant__append_id_rsa_pub_exists.rc == 0
+
+- name: >
+    compute SHA256sum of append-id-rsa-pub-to-authorized-keys script
+    (outside Vagrant, Linux)
+  shell: sha256sum {{local__append_id_rsa_pub_script_path}}
+  args:
+    chdir: ~/myvagrant/ansible/roles/vagrant/files
+  register: local_linux__append_id_rsa_pub_sha256sum
+  connection: local
+  sudo_user: yh
+  delegate_to: 127.0.0.1
+  ignore_errors: True
+  when: vagrant__append_id_rsa_pub_exists.rc == 0
+
+- name: compute SHA256sum of append-id-rsa-pub script (outside Vagrant, OS X)
+  shell: shasum -a 256 {{local__append_id_rsa_pub_script_path}}
+  args:
+    chdir: ~/myvagrant/ansible/roles/vagrant/files
+  register: local_osx__append_id_rsa_pub_sha256sum
+  connection: local
+  sudo_user: yh
+  delegate_to: 127.0.0.1
+  when: vagrant__append_id_rsa_pub_exists.rc == 0 and
+        local_linux__append_id_rsa_pub_sha256sum.rc != 0
+
+- name: ensure SHA256sum of append-id-rsa-pub script (outside Vagrant) is taken
+  assert:
+    that: >
+      local_linux__append_id_rsa_pub_sha256sum.rc == 0 or
+      local_osx__append_id_rsa_pub_sha256sum.rc == 0
+  when: vagrant__append_id_rsa_pub_exists.rc == 0
+
+- name: copy append-id-rsa-pub script to Vagrant (if needed)
+  copy: src="{{local__append_id_rsa_pub_script_path}}"
+        dest="{{vagrant__append_id_rsa_pub_script_path}}"
+        owner=root
+        group=root
+        mode=755
+  when: vagrant__append_id_rsa_pub_exists.rc != 0 or
+        (local_linux__append_id_rsa_pub_sha256sum.rc == 0 and
+         local_linux__append_id_rsa_pub_sha256sum.stdout.split()[0] !=
+         vagrant__append_id_rsa_pub_sha256sum.stdout.split()[0]
+        ) or
+        (local_osx__append_id_rsa_pub_sha256sum.rc == 0 and
+         local_osx__append_id_rsa_pub_sha256sum.stdout.split()[0] !=
+         vagrant__append_id_rsa_pub_sha256sum.stdout.split()[0]
+        )
+
+- name: copy SSH public key to temporary folder
+  copy: src=id_rsa.pub
+        dest="{{my_id_rsa_pub_path}}"
+        owner=vagrant
+        group=vagrant
+        mode=0400
+
+- name: add SSH public key into authorized keys (if not already added)
+  shell: "{{vagrant__append_id_rsa_pub_script_path}} {{my_id_rsa_pub_path}}"
+  sudo_user: vagrant
+
+- name: remove SSH public key from temporary folder
+  shell: rm {{my_id_rsa_pub_path}}
+### End of code enabling use of custom SSH keypair
+
+
 # This is to allow for commands that require a password
 - name: copy password file to Vagrant
   copy: src=vagrant_password.txt

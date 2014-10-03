@@ -25,6 +25,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       ansible.verbose = "vvvv"
       ansible.limit = "all"
     end
+
+    # NOTE: You will need to comment this line below on your first
+    #       provisioning.
+    #       After the first provisioning, you can uncomment it
+    my_config.ssh.private_key_path = "~/.ssh/id_rsa"
   end
 
   # Disable automatic box update checking. If you disable this, then
