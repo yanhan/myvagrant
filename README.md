@@ -64,7 +64,7 @@ A little troublesome I know.
 
 Now we are ready to initialize and provision the Vagrant.
 
-    . venv/bin/activate    # enter virtualenv so we can use Ansible
-    vagrant up             # starts and provisions the vagrant
+    . venv/bin/activate       # enter virtualenv so we can use Ansible
+    vagrant up --provision    # starts and provisions the vagrant
 
 Everything's ready from here on.
