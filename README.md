@@ -41,6 +41,11 @@ The following entry should be in your SSH config (most likely at
         Port 2222
         User vagrant
 
+## Vagrant Password file
+
+There should be a `ansible/roles/vagrant/files/vagrant_password.txt` file
+containing a single line which is the password of the `vagrant` user.
+
 ## Vagrant Up
 
 Now we are ready to initialize and provision the Vagrant.
