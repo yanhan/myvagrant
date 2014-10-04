@@ -162,5 +162,8 @@
 
 - include: install_rvm.yml
 
+- name: install OCaml
+  apt: name=ocaml state=present
+
 - name: remove password file
   shell: rm -f "{{vagrant_password_file_dest_path}}"
