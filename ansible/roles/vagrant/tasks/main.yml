@@ -126,6 +126,9 @@
 - name: install screen
   apt: name=screen state=present
 
+- name: install tmux
+  apt: name=tmux state=present
+
 - name: install python-virtualenv
   apt: name=python-virtualenv state=present
 
