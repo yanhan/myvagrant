@@ -14,7 +14,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # define name of Vagrant
   config.vm.define :myvagrant do |my_config|
-    my_config.vm.box = "hashicorp/precise64"
+    my_config.vm.box = "ubuntu/trusty64"
     my_config.vm.host_name = "myvagrant"
     my_config.vm.network "private_network", ip: "192.168.124.231"
     my_config.vm.synced_folder "vagrant-share", "/vagrant-share"
