@@ -12,6 +12,9 @@
       cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
   when: oh_my_zsh_installed.rc != 0
   sudo_user: vagrant
+
+- name: change to use zsh shell
+  shell: cat "{{vagrant_password_file_dest_path}}" | chsh -s $(which zsh) vagrant
   when: oh_my_zsh_installed.rc != 0
 
 - name: change vagrant user to use zsh shell
