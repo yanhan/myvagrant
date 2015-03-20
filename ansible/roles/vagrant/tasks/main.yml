@@ -40,7 +40,7 @@
     chdir: ~/myvagrant/ansible/roles/vagrant/files
   register: local_linux__append_id_rsa_pub_sha256sum
   connection: local
-  sudo_user: yh
+  sudo_user: "{{ host_user }}"
   delegate_to: 127.0.0.1
   ignore_errors: True
   when: vagrant__append_id_rsa_pub_exists.rc == 0
@@ -51,8 +51,9 @@
     chdir: ~/myvagrant/ansible/roles/vagrant/files
   register: local_osx__append_id_rsa_pub_sha256sum
   connection: local
-  sudo_user: yh
+  sudo_user: "{{ host_user }}"
   delegate_to: 127.0.0.1
+  ignore_errors: True
   when: vagrant__append_id_rsa_pub_exists.rc == 0 and
         local_linux__append_id_rsa_pub_sha256sum.rc != 0
 

@@ -12,7 +12,7 @@
     chdir: ~/myvagrant/ansible/roles/vagrant/files
   register: update_etc_environment_path_script_local_sha256_sum
   connection: local
-  sudo_user: yh
+  sudo_user: "{{ host_user }}"
   delegate_to: 127.0.0.1
   ignore_errors: true
 
@@ -22,7 +22,7 @@
     chdir: ~/myvagrant/ansible/roles/vagrant/files
   register: osx_update_etc_environment_path_script_local_sha256_sum
   connection: local
-  sudo_user: yh
+  sudo_user: "{{ host_user }}"
   delegate_to: 127.0.0.1
   when: update_etc_environment_path_script_local_sha256_sum.rc != 0
   ignore_errors: true

@@ -1,3 +1,7 @@
+# specify the username on the host machine which you use to run the
+# ansible-playbook
+host_user: philip
+
 home_path: /home/vagrant
 git_crypt_repo_path: /home/vagrant/git-crypt
 node_js_repo_path: /home/vagrant/node

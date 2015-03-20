@@ -60,6 +60,14 @@ and comment out this line in the Vagrantfile before your first provision:
 You will need to uncomment that line after the first provision is done.
 A little troublesome I know.
 
+## ansible/roles/vagrant/vars/main.yml
+
+In the `ansible/roles/vagrant/vars/main.yml` file, you should modify this line:
+
+    host_user: philip
+
+to the actual username on the host machine where you'll running the Vagrant.
+
 ## Vagrant Up
 
 Now we are ready to initialize and provision the Vagrant.
