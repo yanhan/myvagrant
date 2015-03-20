@@ -4,6 +4,11 @@
   sudo_user: vagrant
   ignore_errors: true
 
+- name: grab GPG key for Michal Papis (required on 200315)
+  shell: gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+  sudo_user: vagrant
+  when: rvm_installed.rc != 0
+
 - name: install rvm
   shell: \curl -sSL https://get.rvm.io | bash -s stable
   sudo_user: vagrant
