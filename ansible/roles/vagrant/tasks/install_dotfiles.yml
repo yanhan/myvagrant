@@ -10,6 +10,7 @@
   shell: >
     git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh &&
       cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
+  when: oh_my_zsh_installed.rc != 0
   sudo_user: vagrant
   when: oh_my_zsh_installed.rc != 0
 
