@@ -1,3 +1,4 @@
+home_path: /home/vagrant
 git_crypt_repo_path: /home/vagrant/git-crypt
 node_js_repo_path: /home/vagrant/node
 update_etc_environment_path_script_path: /usr/local/bin/update-etc-environment-path
