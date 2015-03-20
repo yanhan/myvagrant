@@ -1,4 +1,17 @@
 ##############################
+# Add git ppa for a more modern version of git
+##############################
+- name: import GPG key for git-core ppa
+  apt_key: keyserver=keyserver.ubuntu.com id=E1DD270288B4E6030699E45FA1715D88E1DF1F24 state=present
+
+- name: add git-core ppa for a more modern version of git
+  apt_repository: repo='deb http://ppa.launchpad.net/git-core/ppa/ubuntu trusty main' state=present update_cache=yes
+
+- name: add git-core ppa for a more modern version of git
+  apt_repository: repo='deb-src http://ppa.launchpad.net/git-core/ppa/ubuntu trusty main' state=present update_cache=yes
+
+
+##############################
 # Use custom keypair for SSH
 # You will need to comment out the following line in the `Vagrantfile`:
 #
@@ -150,10 +163,11 @@
   shell: (wget -qO- https://get.docker.io/ | bash) && usermod -aG docker vagrant
   when: docker_exists.rc != 0
 
-- name: ensure git is not installed by package manager
-  apt: name=git state=absent
+- name: install libcurl
+  apt: name=libcurl4-openssl-dev state=present
 
-- include: install_git.yml
+- name: install git
+  apt: name=git state=present
 
 - include: install_dotfiles.yml
 
