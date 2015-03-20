@@ -14,7 +14,7 @@ The Vagrant's name is `myvagrant`.
 - [Vagrant](http://www.vagrantup.com/) 1.6.3
 - Python 2.7.x
 - virtualenv
-- [Ansible](http://www.ansible.com/home) 1.6.6
+- [Ansible](http://www.ansible.com/home) 1.8.4
 
 We assume you know how to install Virtualbox, Vagrant and Python.
 We'll cover the installation of virtualenv and Ansible below.
