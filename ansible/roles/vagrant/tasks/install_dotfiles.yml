@@ -1,6 +1,8 @@
 - name: check if oh my zsh is installed
   shell: test -d .oh-my-zsh
   sudo_user: vagrant
+  args:
+    chdir: "{{ home_path }}"
   register: oh_my_zsh_installed
   ignore_errors: true
 
