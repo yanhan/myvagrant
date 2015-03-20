@@ -70,11 +70,13 @@
         group=root
         mode=755
   when: vagrant__append_id_rsa_pub_exists.rc != 0 or
-        (local_linux__append_id_rsa_pub_sha256sum.rc == 0 and
+        (local_linux__append_id_rsa_pub_sha256sum.rc is defined and
+         local_linux__append_id_rsa_pub_sha256sum.rc == 0 and
          local_linux__append_id_rsa_pub_sha256sum.stdout.split()[0] !=
          vagrant__append_id_rsa_pub_sha256sum.stdout.split()[0]
         ) or
-        (local_osx__append_id_rsa_pub_sha256sum.rc == 0 and
+        (local_osx__append_id_rsa_pub_sha256sum.rc is defined and
+         local_osx__append_id_rsa_pub_sha256sum.rc == 0 and
          local_osx__append_id_rsa_pub_sha256sum.stdout.split()[0] !=
          vagrant__append_id_rsa_pub_sha256sum.stdout.split()[0]
         )
